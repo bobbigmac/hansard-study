@@ -75,7 +75,7 @@ Meteor.methods({
       });
 		});
 	},
-	'get-bills': function() {
+	/*'get-bills': function() {
 		var parliament = require('psuk-parliament');
 		console.log(parliament);
 		
@@ -110,5 +110,5 @@ Meteor.methods({
 			.catch(function(err) {
 				console.error(err);
 			});
-	}
+	}*/
 });

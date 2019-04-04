@@ -14,6 +14,12 @@ npm run start
 # Open localhost:3000 in your browser
 ```
 
+To initialise your database and start scanning, head into the console (server side) and enter:
+
+```
+Meteor.call('get-resource-files');
+```
+
 ## TODO:
 
 - Groups
