@@ -24,3 +24,4 @@ Meteor.call('get-resource-files');
 
 - Groups
 - Reports
+- [Thesaurus](http://explore.data.parliament.uk/?learnmore=Thesaurus)

@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Fragments, Speakers } from '/shared/model.js';
 
+const request = require('request');
 
 const averageKeys = function(obj1, obj2) {
 	return Object.keys(obj1).reduce((pre, key) => {
@@ -9,8 +10,47 @@ const averageKeys = function(obj1, obj2) {
 	}, {});
 }
 
-const process = function() {
+const process = function(logIt) {
 	// return false;
+
+	Speakers.find({
+		'mnisIds': { $exists: true },
+		'profile': { $exists: false },
+	}, {
+		limit: 1,
+	}).observeChanges({
+		added: function (id, speaker) {
+			const url = 'http://lda.data.parliament.uk/members/' + speaker.mnisIds[0] + '.json';
+
+			request(url, Meteor.bindEnvironment(function(err, res, content) {
+				err && console.error(err);
+				if(!err) {
+					const profile = {};
+					let result = null;
+
+					try {
+						const resultObj = JSON.parse(content || '{}');
+						result = resultObj && resultObj.result;
+					} catch(err) {
+						console.warn('Could not parse for', speaker.mnisIds[0]);
+						// result = {};
+					}
+
+					const update = {
+						$set: {
+							profile: result,
+							party: result && result.primaryTopic && result.primaryTopic.party && result.primaryTopic.party._value,
+							twitter: result && result.primaryTopic && result.primaryTopic.twitter && result.primaryTopic.twitter._value,
+						}
+					};
+					// console.log(update);
+					Speakers.update(id, update);
+
+					logIt && console.log('Got content for mnisId', speaker.mnisIds[0], typeof content, result);
+				}
+			}));
+		}
+	});
 
 	Fragments.find({
 		'speaker': { $exists: true },
@@ -47,9 +87,9 @@ const process = function() {
 				}
 			};
 
-			if(fragment.speaker.mnsId) {
+			if(fragment.speaker.mnisId) {
 				update['$addToSet'] = update['$addToSet'] || {};
-				update['$addToSet'].mnsIds = fragment.speaker.mnsId;
+				update['$addToSet'].mnisIds = fragment.speaker.mnisId;
 			}
 
 			if(fragment.speaker.name) {
@@ -107,7 +147,7 @@ const process = function() {
 			}
 			
 			// console.log('Update is', update, 'for pims', fragment.speaker.pimsId);
-			console.log('Updated pims', fragment.speaker.pimsId, 'speakerId', speakerId, existingSpeaker && existingSpeaker.cts && existingSpeaker.cts[0]);
+			logIt && console.log('Updated pims', fragment.speaker.pimsId, 'speakerId', speakerId, existingSpeaker && existingSpeaker.cts && existingSpeaker.cts[0]);
 		}
 	});
 }

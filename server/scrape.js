@@ -62,7 +62,7 @@ const forEachFileInZipBuffer = function(buffer, cb) {
 	});
 }
 
-const scrape = function() {
+const scrape = function(logIt) {
 	ResourceFiles.find({
 		scanned: {$exists:false}
 	}, {
@@ -70,7 +70,7 @@ const scrape = function() {
 	}).observeChanges({
 		added: function (resourceId, resource) {
 			Meteor.setTimeout(() => {
-				console.log('Scanning resource', resourceId);
+				logIt && console.log('Scanning resource', resourceId);
 				// console.log(resourceId);
 
 				const addFragment = Meteor.bindEnvironment(function(file) {
@@ -118,7 +118,7 @@ const scrape = function() {
 											}, {
 												$set: newFragment
 											});
-											console.log('Added', newFragment, 'as', newFragmentId);
+											logIt && console.log('Added', newFragment, 'as', newFragmentId);
 										}
 									});
 								});

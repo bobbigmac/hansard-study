@@ -71,7 +71,7 @@ const measureString = function(str, cb) {
 }
 
 
-const process = function() {
+const process = function(logIt) {
 	//Extract terms addition
 	Fragments.find({
 		'text': { $exists: true },
@@ -87,7 +87,7 @@ const process = function() {
 					$set: { terms: terms || {} }
 				});
 				
-				console.log('Got terms', id, terms.words && terms.words.length, terms.phrases && terms.phrases.length);
+				logIt && console.log('Got terms', id, terms.words && terms.words.length, terms.phrases && terms.phrases.length);
 			});
 		}
 	})
@@ -115,7 +115,7 @@ const process = function() {
 				}
 			});
 			
-			console.log('Set optimism, affect and wellbeing for Fragment', id, optimism && optimism.OPTIMISM);
+			logIt && console.log('Set optimism, affect and wellbeing for Fragment', id, optimism && optimism.OPTIMISM);
 		}
 	})
 
@@ -187,7 +187,7 @@ const process = function() {
 				// 	$set: newData
 				// });
 
-				console.log('Analysed fragment', id);
+				logIt && console.log('Analysed fragment', id);
 			}));
 		}
 	});
