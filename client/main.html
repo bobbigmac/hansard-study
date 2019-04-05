@@ -19,6 +19,8 @@
           <th>mnisId</th>
           <th>Name(s)</th>
           <th>Party</th>
+          <th>Constituency</th>
+          <th>FK</th>
           <th>Twitter</th>
         </tr>
       </thead>
@@ -28,6 +30,8 @@
             <td>{{mnisIds}}</td>
             <td>{{cts}}</td>
             <td>{{party}}</td>
+            <td>{{profile.primaryTopic.constituency.label._value}}</td>
+            <td>{{averageArray fks}}</td>
             <td>{{#if twitter}}<a href={{twitterLink twitter}} target="_blank">{{twitterName twitter}}</a>{{/if}}</td>
           </tr>
         {{/each}}

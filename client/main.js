@@ -14,8 +14,8 @@ Template.speakers.onCreated(function() {
   instance.loaded = new ReactiveVar(0);
   instance.search = new ReactiveVar("");
   instance.direction = new ReactiveVar(1);
-  instance.sort = new ReactiveVar("");
-  instance.limit = new ReactiveVar(10);
+  instance.sort = new ReactiveVar("fks");
+  instance.limit = new ReactiveVar(1000);
 
   instance.autorun(function () {
     var subscription = instance.subscribe('speakers', {

@@ -1,6 +1,8 @@
 import { Meteor } from 'meteor/meteor'
 import { Speakers } from '/shared/model.js';
 
+const maxSpeakersLimit = 100;
+
 export const getSpeakers = function({ search = '', limit = 10, sort = '', direction = 1}) {
 	const filter = {}, options = {};
 
@@ -9,7 +11,7 @@ export const getSpeakers = function({ search = '', limit = 10, sort = '', direct
 			[sort]: direction
 		}
 	}
-	options.limit = limit > 100 ? 100 : limit;
+	options.limit = limit > maxSpeakersLimit ? maxSpeakersLimit : limit;
 
 	//TODO: Allow server to get more fields
 	options.fields = {
@@ -17,6 +19,7 @@ export const getSpeakers = function({ search = '', limit = 10, sort = '', direct
 		mnisIds: 1,
 		pimsId: 1,
 		cts: 1,
+		fks: 1,
 		names: 1,
 		profile: 1,
 		twitter: 1,
