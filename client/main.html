@@ -5,21 +5,36 @@
 <body>
   <h1>Welcome to Meteor!</h1>
 
-  {{> hello}}
-  {{> info}}
+  {{> speakers}}
 </body>
 
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
-</template>
-
-<template name="info">
-  <h2>Learn Meteor!</h2>
-  <ul>
-    <li><a href="https://www.meteor.com/try" target="_blank">Do the Tutorial</a></li>
-    <li><a href="http://guide.meteor.com" target="_blank">Follow the Guide</a></li>
-    <li><a href="https://docs.meteor.com" target="_blank">Read the Docs</a></li>
-    <li><a href="https://forums.meteor.com" target="_blank">Discussions</a></li>
-  </ul>
+<template name="speakers">
+  <div>
+    <div>
+      Speakers List: {{speakers.count}} / {{limit}}
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>mnisId</th>
+          <th>Name(s)</th>
+          <th>Party</th>
+          <th>Twitter</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each speakers}}
+          <tr>
+            <td>{{mnisIds}}</td>
+            <td>{{cts}}</td>
+            <td>{{party}}</td>
+            <td>{{#if twitter}}<a href={{twitterLink twitter}} target="_blank">{{twitterName twitter}}</a>{{/if}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <div>
+      <button class="load-more">Load More...</button>
+    </div>
+  </div>
 </template>

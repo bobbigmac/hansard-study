@@ -8,12 +8,18 @@ if(Meteor.isServer) {
 		pimsId: 1
 	})
 }
+if(Meteor.isClient) {
+	window.Speakers = Speakers;
+}
 
 const Fragments = new Mongo.Collection('fragments');
 if(Meteor.isServer) {
 	Fragments._ensureIndex({
 		UID: 1
 	})
+}
+if(Meteor.isClient) {
+	window.Fragments = Fragments;
 }
 
 export { Bills, ResourceFiles, Files, Fragments, Speakers };

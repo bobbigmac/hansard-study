@@ -1,5 +1,9 @@
+import { Meteor } from 'meteor/meteor'
+import { Fragments, Speakers } from '/shared/model.js';
+import { getSpeakers } from '/shared/queries.js';
+
 const publish = function() {
-	console.log('Want to publish for client-side subs');
+	Meteor.publish("speakers", getSpeakers)
 }
 
 export default publish;
