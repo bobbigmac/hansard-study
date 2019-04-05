@@ -26,34 +26,39 @@ const streamToBuffer = function(readStream, cb) {
 
 const forEachFileInZipBuffer = function(buffer, cb) {
 	yauzl.fromBuffer(buffer, (error, zipfile) => {
-		zipfile.on("error", function(error) {
-			console.error(error);
-		});
+		if(zipfile) {
+			zipfile.on("error", function(error) {
+				console.error(error);
+			});
 
-		zipfile.on("entry", function(entry) {
-			if (/\/$/.test(entry.fileName)) {
-			} else {
-				zipfile.openReadStream(entry, function(err, readStream) {
-					err && console.error(err);
-					!err && streamToBuffer(readStream, function(err, buffer) {
+			zipfile.on("entry", function(entry) {
+				if (/\/$/.test(entry.fileName)) {
+				} else {
+					zipfile.openReadStream(entry, function(err, readStream) {
 						err && console.error(err);
+						!err && streamToBuffer(readStream, function(err, buffer) {
+							err && console.error(err);
 
-						if(!err) {
-							if(/\.zip$/.test(entry.fileName)) {
-								console.log('Want to parse sub-zip', entry.fileName);
-								forEachFileInZipBuffer(buffer, cb);
-							} else if(/\.xml$/.test(entry.fileName)) {
-								// console.log('Got buffer for fileName', entry.fileName, buffer);
-								cb(false, entry.fileName, buffer);
-							} else if(/\.pdf$/.test(entry.fileName)) {
-								console.log('Ignoring pdf', entry.fileName);
-								// cb(false, entry.fileName);//, zipfile
+							if(!err) {
+								if(/\.zip$/.test(entry.fileName)) {
+									console.log('Want to parse sub-zip', entry.fileName);
+									forEachFileInZipBuffer(buffer, cb);
+								} else if(/\.xml$/.test(entry.fileName)) {
+									// console.log('Got buffer for fileName', entry.fileName, buffer);
+									cb(false, entry.fileName, buffer);
+								} else if(/\.pdf$/.test(entry.fileName)) {
+									console.log('Ignoring pdf', entry.fileName);
+									// cb(false, entry.fileName);//, zipfile
+								}
 							}
-						}
+						});
 					});
-				});
-			}
-		});
+				}
+			});
+		} else {
+			console.warn('No zipfile in buffer', error);
+			cb && cb(error, false);
+		}
 	});
 }
 

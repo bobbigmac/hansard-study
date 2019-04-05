@@ -1,8 +1,11 @@
 import { Meteor } from 'meteor/meteor';
 import { Bills, ResourceFiles } from '/shared/model.js';
 
+import Publish from '/server/publish.js';
+
 import Scrape from '/server/scrape.js';
 import ProcessText from '/server/process-text.js';
+import ProcessSpeakers from '/server/process-speakers.js';
 
 const request = require('request');
 const xml2js = require('xml2js');
@@ -11,9 +14,11 @@ const crypto = require('crypto');
 
 Meteor.startup(() => {
 	// code to run on server at startup
-	Scrape.scrape();
-	// console.log(ProcessText);
+	// Scrape.scrape();
 	ProcessText.process();
+	ProcessSpeakers.process();
+	
+	Publish();
 });
 
 
