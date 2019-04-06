@@ -3,7 +3,28 @@ body {
   font-family: sans-serif;
 }
 table {
-	width: 80%;
+	width: 100%;
 	margin-right: auto;
 	margin-left: auto;
+
+  border-collapse: collapse;
 }
+table, th, td {
+	border: 1px solid #cccccc;
+}
+th, td {
+	padding: 3px 3px;
+}
+th.important-column, td.important-column {
+	/*border: 2px solid black;*/
+	background-color: #cfcfcf;
+}
+
+[party="Labour"] { background-color:#dc241f; }
+[party="Scottish National Party"] { background-color:#ffff00; }
+[party="Liberal Democrat"] { background-color:#fdbb30; }
+[party="Conservative"] { background-color:#0087dc; }
+[party="Green Party"] { background-color:#78b943; }
+[party="UKIP"] { background-color:#B3009D; }
+[party="Plaid Cymru"] { background-color:#3F8428; }
+[party="Democratic Unionist Party"] { background-color:#D46A4C; }

@@ -4,6 +4,8 @@ import { getSpeakers } from '/shared/queries.js';
 
 const publish = function() {
 	Meteor.publish("speakers", getSpeakers)
+	
+	//TODO:Meteor.publish("speaker", getSpeaker)
 }
 
 export default publish;

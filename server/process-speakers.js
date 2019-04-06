@@ -3,6 +3,19 @@ import { Fragments, Speakers } from '/shared/model.js';
 
 const request = require('request');
 
+const newAverage = function(newEntry, existingEntries) {
+	const newArray = [newEntry].concat(existingEntries);
+	const sum = newArray.reduce((pre, val) => {
+		return pre + val;
+	}, 0);
+	return sum / newArray.length;
+}
+const average = function(entries = []) {
+	const sum = entries.reduce((pre, val) => {
+		return pre + val;
+	}, 0);
+	return sum / entries.length;
+}
 const averageKeys = function(obj1, obj2) {
 	return Object.keys(obj1).reduce((pre, key) => {
 		pre[key] = (obj1[key] + obj2[key]) / 2;
@@ -12,6 +25,28 @@ const averageKeys = function(obj1, obj2) {
 
 const process = function(logIt) {
 	// return false;
+	Speakers.find({
+		$or: [
+			{ sentiment: {$exists:false}},
+			{ affect: {$exists:false}},
+			{ intensity: {$exists:false}},
+			{ optimism: {$exists:false}},
+			{ fks: {$exists:false}},
+		]
+	}, {
+		// limit: 1,
+		fields: {affects:1,sentiments:1,fks:1,optimisms:1,intensities:1},
+	}).fetch().map(s => {
+		Speakers.update(s._id, {
+			$set: {
+				fk: average(s.fks),
+				intensity: average(s.intensities),
+				optimism: average(s.optimisms),
+				sentiment: average(s.sentiments),
+				affect: average(s.affects),
+			}
+		})
+	});
 
 	Speakers.find({
 		'mnisIds': { $exists: true },
@@ -74,7 +109,7 @@ const process = function(logIt) {
 			const existingSpeaker = Speakers.findOne({
 				pimsId: fragment.speaker.pimsId 
 			}, {
-				fields:{_id: 1,wellbeing:1,cts:1}
+				fields:{_id: 1,wellbeing:1,cts:1,fks:1,sentiments:1,optimisms:1,intensities:1,affects:1}
 			});
 
 			const newWellbeing = fragment.stats && fragment.stats.wellbeing;
@@ -86,6 +121,22 @@ const process = function(logIt) {
 					wellbeing: wellbeing,
 				}
 			};
+
+			if(fragment.stats && fragment.stats.fk) {
+				update['$set'].fk = newAverage(fragment.stats.fk, (existingSpeaker && existingSpeaker.fks) || []);
+			}
+			if(fragment.stats && fragment.stats.sentiment) {
+				update['$set'].sentiment = newAverage(fragment.stats.sentiment, (existingSpeaker && existingSpeaker.sentiments) || []);
+			}
+			if(fragment.stats && fragment.stats.optimism) {
+				update['$set'].optimism = newAverage(fragment.stats.optimism, (existingSpeaker && existingSpeaker.optimisms) || []);
+			}
+			if(fragment.stats && fragment.stats.affect) {
+				update['$set'].affect = newAverage(fragment.stats.affect, (existingSpeaker && existingSpeaker.affects) || []);
+			}
+			if(fragment.stats && fragment.stats.intensity) {
+				update['$set'].intensity = newAverage(fragment.stats.intensity, (existingSpeaker && existingSpeaker.intensities) || []);
+			}
 
 			if(fragment.speaker.mnisId) {
 				update['$addToSet'] = update['$addToSet'] || {};
@@ -109,12 +160,12 @@ const process = function(logIt) {
 				'counts.syllables': fragment.stats.syllables,
 			}
 
-			fragment.terms && fragment.terms.words && fragment.terms.words.forEach(word => {
-				update['$inc']['words.'+word.word.replace(/\./g, '-')] = word.score;
-			});
-			fragment.terms && fragment.terms.phrases && fragment.terms.phrases.forEach(phrase => {
-				update['$inc']['phrases.'+phrase.phrase.replace(/\./g, '-')] = phrase.score;
-			});
+			// fragment.terms && fragment.terms.words && fragment.terms.words.forEach(word => {
+			// 	update['$inc']['words.'+word.word.replace(/\./g, '-')] = word.score;
+			// });
+			// fragment.terms && fragment.terms.phrases && fragment.terms.phrases.forEach(phrase => {
+			// 	update['$inc']['phrases.'+phrase.phrase.replace(/\./g, '-')] = phrase.score;
+			// });
 			
 			update['$push'] = {
 				fks: fragment.stats.fk,
@@ -126,8 +177,8 @@ const process = function(logIt) {
 			
 			fragment.retext && fragment.retext.messages && 
 			fragment.retext.messages.forEach(y => {
-				const messageKey = ['messages', y.source||'unknown', (y.rule||'unknown').replace(/\./g, '-')].join('.');
-				update['$push'][messageKey] = y.text;
+				// const messageKey = ['messages', y.source||'unknown', (y.rule||'unknown').replace(/\./g, '-')].join('.');
+				// update['$push'][messageKey] = y.text;
 				const countsKey = ['counts', y.source||'unknown', (y.rule||'unknown').replace(/\./g, '-')].join('.');
 				update['$inc'][countsKey] = 1;
 			})

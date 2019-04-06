@@ -13,8 +13,8 @@ Template.speakers.onCreated(function() {
   // initialize the reactive variables
   instance.loaded = new ReactiveVar(0);
   instance.search = new ReactiveVar("");
-  instance.direction = new ReactiveVar(1);
-  instance.sort = new ReactiveVar("fks");
+  instance.direction = new ReactiveVar(-1);
+  instance.sort = new ReactiveVar("fk");
   instance.limit = new ReactiveVar(1000);
 
   instance.autorun(function () {

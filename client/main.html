@@ -3,16 +3,13 @@
 </head>
 
 <body>
-  <h1>Welcome to Meteor!</h1>
+  <h3>Study of Parliamentary Hansard Data for Flesch-Kincaid (and other metrics)</h3>
 
   {{> speakers}}
 </body>
 
 <template name="speakers">
   <div>
-    <div>
-      Speakers List: {{speakers.count}} / {{limit}}
-    </div>
     <table>
       <thead>
         <tr>
@@ -20,7 +17,13 @@
           <th>Name(s)</th>
           <th>Party</th>
           <th>Constituency</th>
-          <th>FK</th>
+          <th title="Fragments">Frags</th>
+          <th title="Words">Words</th>
+          <th class="important-column" title="Flesch-Kincaid">FK</th>
+          <th title="Optimism">Opt</th>
+          <th title="Sentiment">Sen</th>
+          <th title="Affect">Aff</th>
+          <th title="Intensity">Int</th>
           <th>Twitter</th>
         </tr>
       </thead>
@@ -29,9 +32,15 @@
           <tr>
             <td>{{mnisIds}}</td>
             <td>{{cts}}</td>
-            <td>{{party}}</td>
+            <td party={{cleanPartyName party}}>{{party}}</td>
             <td>{{profile.primaryTopic.constituency.label._value}}</td>
-            <td>{{averageArray fks}}</td>
+            <td>{{counts.fragments}}</td>
+            <td>{{counts.words}}</td>
+            <td class="important-column">{{toFixed fk 2}}</td>
+            <td>{{toFixed optimism 2}}</td>
+            <td>{{toFixed sentiment 2}}</td>
+            <td>{{toFixed affect 2}}</td>
+            <td>{{toFixed intensity 2}}</td>
             <td>{{#if twitter}}<a href={{twitterLink twitter}} target="_blank">{{twitterName twitter}}</a>{{/if}}</td>
           </tr>
         {{/each}}

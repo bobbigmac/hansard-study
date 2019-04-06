@@ -7,9 +7,15 @@ if(Meteor.isServer) {
 	Speakers._ensureIndex({
 		pimsId: 1
 	})
+	Speakers._ensureIndex({
+		fk: 1
+	})
 }
 if(Meteor.isClient) {
 	window.Speakers = Speakers;
+}
+if(Meteor.isServer) {
+	global.Speakers = Speakers;
 }
 
 const Fragments = new Mongo.Collection('fragments');
@@ -20,6 +26,9 @@ if(Meteor.isServer) {
 }
 if(Meteor.isClient) {
 	window.Fragments = Fragments;
+}
+if(Meteor.isServer) {
+	global.Fragments = Fragments;
 }
 
 export { Bills, ResourceFiles, Files, Fragments, Speakers };
