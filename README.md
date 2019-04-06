@@ -22,6 +22,7 @@ Meteor.call('get-resource-files');
 
 ## TODO:
 
+- Calculate all counts as percentage of word count
 - Groups
 - Reports
 - [Thesaurus](http://explore.data.parliament.uk/?learnmore=Thesaurus)
