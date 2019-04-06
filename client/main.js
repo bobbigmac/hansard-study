@@ -18,6 +18,8 @@ Template.speakers.onCreated(function() {
   instance.limit = new ReactiveVar(1000);
 
   instance.autorun(function () {
+    // instance.loaded.set(0);
+
     var subscription = instance.subscribe('speakers', {
     	limit: instance.limit.get(),
     	search: instance.search.get(),
@@ -57,10 +59,43 @@ Template.speakers.helpers({
 
   	// console.log(getSpeakers);
   	return getSpeakers({ sort, direction, limit, search });
+  },
+  parties() {
+    const sort = Template.instance().sort.get();
+    const direction = Template.instance().direction.get();
+    const limit = Template.instance().limit.get();
+    const search = Template.instance().limit.get();
+
+    // console.log(getSpeakers);
+    const speakers = getSpeakers({ sort, direction, limit, search }).fetch();
+    const parties = speakers.reduce((pre, speaker) => {
+      const party = (speaker.party || '').replace(' (Co-op)', '').trim();
+      if(party && party !== 'Speaker') {
+        pre[party] = pre[party] || 0;
+        pre[party]++;
+      }
+      return pre;
+    }, {});
+
+    const partyArray = Object.entries(parties).map(([key, value]) => ({name: key, count: value}));
+    partyArray.sort((a,b) => a.count > b.count ? -1 : 1);
+    return partyArray;
   }
 });
 
 Template.speakers.events({
+  'click th[data-sort]': function(event, instance) {
+    const sort = Template.instance().sort.get();
+    const direction = Template.instance().direction.get();
+
+    const newSort = event.target.dataset && event.target.dataset.sort;
+    if(newSort === sort) {
+      Template.instance().direction.set(Template.instance().direction.get() * -1);
+    } else {
+      Template.instance().sort.set(newSort);
+    }
+    // console.log('newSort', newSort);
+  },
   'click .load-more': function(event, instance) {
     event.preventDefault();
 

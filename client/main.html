@@ -9,6 +9,14 @@
 </body>
 
 <template name="speakers">
+  <div class="party-boxes">
+    {{#each parties}}
+      <span class="party-box" party={{name}}>
+        <span class="party-name">{{name}}</span>
+        <span class="party-count">{{count}}</span>
+      </span>
+    {{/each}}
+  </div>
   <div>
     <table>
       <thead>
@@ -17,13 +25,13 @@
           <th>Name(s)</th>
           <th>Party</th>
           <th>Constituency</th>
-          <th title="Fragments">Frags</th>
-          <th title="Words">Words</th>
-          <th class="important-column" title="Flesch-Kincaid">FK</th>
-          <th title="Optimism">Opt</th>
-          <th title="Sentiment">Sen</th>
-          <th title="Affect">Aff</th>
-          <th title="Intensity">Int</th>
+          <th class={{sortClass 'counts.fragments' sort direction}} data-sort="counts.fragments" title="Fragments">Frags</th>
+          <th class={{sortClass 'counts.words' sort direction}} data-sort="counts.words" title="Words">Words</th>
+          <th class={{sortClass 'fk' sort direction}} data-sort="fk" title="Flesch-Kincaid">FK</th>
+          <th class={{sortClass 'optimism' sort direction}} data-sort="optimism" title="Optimism">Opt</th>
+          <th class={{sortClass 'sentiment' sort direction}} data-sort="sentiment" title="Sentiment">Sen</th>
+          <th class={{sortClass 'affect' sort direction}} data-sort="affect" title="Affect">Aff</th>
+          <th class={{sortClass 'intensity' sort direction}} data-sort="intensity" title="Intensity">Int</th>
           <th>Twitter</th>
         </tr>
       </thead>
@@ -34,13 +42,13 @@
             <td>{{cts}}</td>
             <td party={{cleanPartyName party}}>{{party}}</td>
             <td>{{profile.primaryTopic.constituency.label._value}}</td>
-            <td>{{counts.fragments}}</td>
-            <td>{{counts.words}}</td>
-            <td class="important-column">{{toFixed fk 2}}</td>
-            <td>{{toFixed optimism 2}}</td>
-            <td>{{toFixed sentiment 2}}</td>
-            <td>{{toFixed affect 2}}</td>
-            <td>{{toFixed intensity 2}}</td>
+            <td class={{sortClass 'counts.fragments' sort}}>{{counts.fragments}}</td>
+            <td class={{sortClass 'counts.words' sort}}>{{counts.words}}</td>
+            <td class={{sortClass 'fk' sort}}>{{toFixed fk 2}}</td>
+            <td class={{sortClass 'optimism' sort}}>{{toFixed optimism 2}}</td>
+            <td class={{sortClass 'sentiment' sort}}>{{toFixed sentiment 2}}</td>
+            <td class={{sortClass 'affect' sort}}>{{toFixed affect 2}}</td>
+            <td class={{sortClass 'intensity' sort}}>{{toFixed intensity 2}}</td>
             <td>{{#if twitter}}<a href={{twitterLink twitter}} target="_blank">{{twitterName twitter}}</a>{{/if}}</td>
           </tr>
         {{/each}}

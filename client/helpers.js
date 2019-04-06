@@ -9,7 +9,16 @@ Template.registerHelper("averageArray",function(arr = [], decimals = 2) {
 });
 
 Template.registerHelper("cleanPartyName",function(name = '') {
-	return name.replace(' (Co-op)', '').trim();
+	return (name || '').replace(' (Co-op)', '').trim();
+});
+
+Template.registerHelper("sortClass",function(key, usedKey, usedDirection = -1) {
+	const outClass = 
+		(key === usedKey ? 'sort-selected' : 'sort-unselected')
+		+ ' ' +
+		(usedDirection === -1 ? 'downwards' : 'upwards');
+	// console.log(key, usedKey, usedDirection, outClass);
+	return outClass;
 });
 
 Template.registerHelper("toFixed",function(num, decimals = 2) {

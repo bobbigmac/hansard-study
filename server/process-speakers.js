@@ -25,7 +25,7 @@ const averageKeys = function(obj1, obj2) {
 
 const process = function(logIt) {
 	// return false;
-	Speakers.find({
+	/*Speakers.find({
 		$or: [
 			{ sentiment: {$exists:false}},
 			{ affect: {$exists:false}},
@@ -46,7 +46,7 @@ const process = function(logIt) {
 				affect: average(s.affects),
 			}
 		})
-	});
+	});*/
 
 	Speakers.find({
 		'mnisIds': { $exists: true },
