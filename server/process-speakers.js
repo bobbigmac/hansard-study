@@ -1,4 +1,6 @@
 import { Meteor } from 'meteor/meteor';
+// import { _ } from 'meteor/underscore';
+
 import { Fragments, Speakers } from '/shared/model.js';
 
 const request = require('request');
@@ -26,27 +28,40 @@ const averageKeys = function(obj1, obj2) {
 const process = function(logIt) {
 	// return false;
 	/*Speakers.find({
-		$or: [
-			{ sentiment: {$exists:false}},
-			{ affect: {$exists:false}},
-			{ intensity: {$exists:false}},
-			{ optimism: {$exists:false}},
-			{ fks: {$exists:false}},
-		]
+		// pwcounts: {$exists: false}//TODO: Remove
+		counts: {$exists: true}//TODO: Remove
 	}, {
-		// limit: 1,
-		fields: {affects:1,sentiments:1,fks:1,optimisms:1,intensities:1},
+		// limit: 1,//TODO: Remove
+		fields: {counts:1},
 	}).fetch().map(s => {
-		Speakers.update(s._id, {
-			$set: {
-				fk: average(s.fks),
-				intensity: average(s.intensities),
-				optimism: average(s.optimisms),
-				sentiment: average(s.sentiments),
-				affect: average(s.affects),
-			}
-		})
-	});*/
+		const totalWordCount = ((s && s.counts && s.counts.words) || 0);
+		const totalFragCount = 1 + ((s && s.counts && s.counts.fragments) || 0);
+		
+		const updateFields = {};
+
+		let added = 0;
+		Object.keys(s.counts).map(xKey => {
+			Object.keys(s.counts[xKey]).map(yKey => {
+				const usingTotal = (xKey === 'retext-readability' ? totalFragCount : totalWordCount);
+				
+				const countsKey = ['counts', xKey||'unknown', (yKey||'unknown').replace(/\./g, '-')].join('.');
+
+				const perWordCountsKey = ['pwcounts', xKey||'unknown', (yKey||'unknown').replace(/\./g, '-')].join('.');
+				const currentCount = (s ? countsKey.split('.').reduce((o,i) => o && o[i], s) || 0 : 0);
+
+				updateFields[perWordCountsKey] = (currentCount / usingTotal) * 100;
+				added++;
+			});
+		});
+
+		if(added) {
+			console.log('Want to set on speaker:', s._id, updateFields);
+			Speakers.update(s._id, {
+				$set: updateFields
+			})
+		}
+	});
+	return false;*/
 
 	Speakers.find({
 		'mnisIds': { $exists: true },
@@ -109,7 +124,11 @@ const process = function(logIt) {
 			const existingSpeaker = Speakers.findOne({
 				pimsId: fragment.speaker.pimsId 
 			}, {
-				fields:{_id: 1,wellbeing:1,cts:1,fks:1,sentiments:1,optimisms:1,intensities:1,affects:1}
+				fields:{
+					_id: 1,
+					wellbeing:1,cts:1,fks:1,sentiments:1,optimisms:1,intensities:1,affects:1,
+					counts: 1,
+				}
 			});
 
 			const newWellbeing = fragment.stats && fragment.stats.wellbeing;
@@ -174,6 +193,9 @@ const process = function(logIt) {
 				affects: fragment.stats.affect,
 				intensities: fragment.stats.intensity,
 			}
+
+			const totalWordCount = (fragment.stats.words || 0) + ((existingSpeaker && existingSpeaker.counts && existingSpeaker.counts.words) || 0);
+			const totalFragCount = 1 + ((existingSpeaker && existingSpeaker.counts && existingSpeaker.counts.fragments) || 0);
 			
 			fragment.retext && fragment.retext.messages && 
 			fragment.retext.messages.forEach(y => {
@@ -181,6 +203,14 @@ const process = function(logIt) {
 				// update['$push'][messageKey] = y.text;
 				const countsKey = ['counts', y.source||'unknown', (y.rule||'unknown').replace(/\./g, '-')].join('.');
 				update['$inc'][countsKey] = 1;
+
+				const perWordCountsKey = ['pwcounts', y.source||'unknown', (y.rule||'unknown').replace(/\./g, '-')].join('.');
+				const currentCount = (existingSpeaker ? countsKey.split('.').reduce((o,i) => o && o[i], existingSpeaker) || 0 : 0) + 1;
+
+				// console.log(perWordCountsKey, currentCount, totalWordCount, 'currentCount / totalWordCount', (currentCount / totalWordCount) * 100);
+				const usingTotal = (y.source === 'retext-readability' ? totalFragCount : totalWordCount);
+				update['$set'][perWordCountsKey] = (currentCount / usingTotal) * 100;
+				//TODO: Will probably need to calc pwcounts specifically for Speakers who were processed early
 			})
 
 			const res = Speakers.upsert({

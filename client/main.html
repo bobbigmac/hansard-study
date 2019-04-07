@@ -32,10 +32,12 @@
           <th class={{sortClass 'sentiment' sort direction}} data-sort="sentiment" title="Sentiment">Sen</th>
           <th class={{sortClass 'affect' sort direction}} data-sort="affect" title="Affect">Aff</th>
           <th class={{sortClass 'intensity' sort direction}} data-sort="intensity" title="Intensity">Int</th>
-          <th class={{sortClass 'counts.retext-intensify.hedge' sort direction}} data-sort="counts.retext-intensify.hedge" title="Hedge">Hedge</th>
-          <th class={{sortClass 'counts.retext-intensify.weasel' sort direction}} data-sort="counts.retext-intensify.weasel" title="Weasel">Weasel</th>
-          <th class={{sortClass 'counts.retext-intensify.filler' sort direction}} data-sort="counts.retext-intensify.filler" title="Filler">Filler</th>
-          <th class={{sortClass 'counts.retext-readability.retext-readability' sort direction}} data-sort="counts.retext-readability.retext-readability" title="Readability Warnings">Warn</th>
+
+          <th class={{sortClass 'pwcounts.retext-intensify.hedge' sort direction}} data-sort="pwcounts.retext-intensify.hedge" title="Hedge Words Pct">Hedge</th>
+          <th class={{sortClass 'pwcounts.retext-intensify.weasel' sort direction}} data-sort="pwcounts.retext-intensify.weasel" title="Weasel Words Pct">Weasel</th>
+          <th class={{sortClass 'pwcounts.retext-intensify.filler' sort direction}} data-sort="pwcounts.retext-intensify.filler" title="Filler Words Pct">Filler</th>
+          <th class={{sortClass 'pwcounts.retext-readability.retext-readability' sort direction}} data-sort="pwcounts.retext-readability.retext-readability" title="Readability Warnings per Fragment">Warn</th>
+
           <th>Twitter</th>
         </tr>
       </thead>
@@ -53,10 +55,12 @@
             <td class={{sortClass 'sentiment' sort}}>{{toFixed sentiment 2}}</td>
             <td class={{sortClass 'affect' sort}}>{{toFixed affect 2}}</td>
             <td class={{sortClass 'intensity' sort}}>{{toFixed intensity 2}}</td>
-            <td class={{sortClass 'counts.retext-intensify.hedge' sort}}>{{ deepProp counts "retext-intensify" "hedge"}}</td>
-            <td class={{sortClass 'counts.retext-intensify.weasel' sort}}>{{ deepProp counts "retext-intensify" "weasel"}}</td>
-            <td class={{sortClass 'counts.retext-intensify.filler' sort}}>{{ deepProp counts "retext-intensify" "filler"}}</td>
-            <td class={{sortClass 'counts.retext-readability.retext-readability' sort}}>{{ deepProp counts "retext-readability" "retext-readability"}}</td>
+
+            <td class={{sortClass 'pwcounts.retext-intensify.hedge' sort}}>{{ deepProp pwcounts "retext-intensify" "hedge"}}%</td>
+            <td class={{sortClass 'pwcounts.retext-intensify.weasel' sort}}>{{ deepProp pwcounts "retext-intensify" "weasel"}}%</td>
+            <td class={{sortClass 'pwcounts.retext-intensify.filler' sort}}>{{ deepProp pwcounts "retext-intensify" "filler"}}%</td>
+            <td class={{sortClass 'pwcounts.retext-readability.retext-readability' sort}}>{{ deepProp pwcounts "retext-readability" "retext-readability"}}%</td>
+
             <td>{{#if twitter}}<a href={{twitterLink twitter}} target="_blank">{{twitterName twitter}}</a>{{/if}}</td>
           </tr>
         {{/each}}

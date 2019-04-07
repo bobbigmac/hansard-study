@@ -14,6 +14,9 @@ export const getSpeakers = function({ search = '', limit = 10, sort = '', direct
 	}
 	options.limit = limit > maxSpeakersLimit ? maxSpeakersLimit : limit;
 
+	options.fields = {
+		fks: 0, intensities: 0, affects: 0, optimisms: 0, sentiments: 0
+	}
 	//TODO: Allow server to get more fields
 	// options.fields = {
 	// 	party: 1,

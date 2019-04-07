@@ -12,15 +12,16 @@ Template.registerHelper("averageArray",function(arr = [], decimals = 2) {
 });
 
 Template.registerHelper("deepProp",function(obj = {}, a = null, b = null, c = null) {
-	// console.log(obj, a, b, c);
+	const decimals = 2;
+	// console.log(obj, a, b, c, decimals);
 	if(c && typeof c === 'string') {
-		return obj[a] && obj[a][b] && obj[a][b][c];
+		return Number.parseFloat(''+(obj[a] && obj[a][b] && obj[a][b][c]), 10).toFixed(decimals);
 	}
 	if(b && typeof b === 'string') {
-		return obj[a] && obj[a][b];
+		return Number.parseFloat(''+(obj[a] && obj[a][b]), 10).toFixed(decimals);
 	}
 	if(a && typeof a === 'string') {
-		return obj[a];
+		return Number.parseFloat(''+(obj[a]), 10).toFixed(decimals);
 	}
 });
 
