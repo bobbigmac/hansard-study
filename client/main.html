@@ -27,6 +27,7 @@
           <th>Constituency</th>
           <th class={{sortClass 'counts.fragments' sort direction}} data-sort="counts.fragments" title="Fragments">Frags</th>
           <th class={{sortClass 'counts.words' sort direction}} data-sort="counts.words" title="Words">Words</th>
+          <th class={{sortClass 'pwcounts.wpf' sort direction}} data-sort="pwcounts.wpf" title="Words">W/F</th>
           <th class={{sortClass 'fk' sort direction}} data-sort="fk" title="Flesch-Kincaid">FK</th>
           <th class={{sortClass 'optimism' sort direction}} data-sort="optimism" title="Optimism">Opt</th>
           <th class={{sortClass 'sentiment' sort direction}} data-sort="sentiment" title="Sentiment">Sen</th>
@@ -50,6 +51,7 @@
             <td>{{profile.primaryTopic.constituency.label._value}}</td>
             <td class={{sortClass 'counts.fragments' sort}}>{{counts.fragments}}</td>
             <td class={{sortClass 'counts.words' sort}}>{{counts.words}}</td>
+            <td class={{sortClass 'pwcounts.wpf' sort}}>{{toFixed pwcounts.wpf 1}}</td>
             <td class={{sortClass 'fk' sort}}>{{toFixed fk 2}}</td>
             <td class={{sortClass 'optimism' sort}}>{{toFixed optimism 2}}</td>
             <td class={{sortClass 'sentiment' sort}}>{{toFixed sentiment 2}}</td>

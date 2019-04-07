@@ -27,41 +27,42 @@ const averageKeys = function(obj1, obj2) {
 
 const process = function(logIt) {
 	// return false;
-	/*Speakers.find({
-		// pwcounts: {$exists: false}//TODO: Remove
-		counts: {$exists: true}//TODO: Remove
-	}, {
-		// limit: 1,//TODO: Remove
-		fields: {counts:1},
-	}).fetch().map(s => {
-		const totalWordCount = ((s && s.counts && s.counts.words) || 0);
-		const totalFragCount = 1 + ((s && s.counts && s.counts.fragments) || 0);
+	// Speakers.find({
+	// 	'pwcounts.wpf': {$exists: false}
+	// 	// counts: {$exists: true}
+	// }, {
+	// 	// limit: 1,//TODO: Remove
+	// 	fields: {counts:1},
+	// }).fetch().map(s => {
+	// 	const totalWordCount = ((s && s.counts && s.counts.words) || 0);
+	// 	const totalFragCount = 1 + ((s && s.counts && s.counts.fragments) || 0);
 		
-		const updateFields = {};
+	// 	const updateFields = {};
 
-		let added = 0;
-		Object.keys(s.counts).map(xKey => {
-			Object.keys(s.counts[xKey]).map(yKey => {
-				const usingTotal = (xKey === 'retext-readability' ? totalFragCount : totalWordCount);
+	// 	updateFields['pwcounts.wpf'] = totalWordCount / totalFragCount;
+	// 	let added = 1;
+	// 	Object.keys(s.counts).map(xKey => {
+	// 		Object.keys(s.counts[xKey]).map(yKey => {
+	// 			const usingTotal = (xKey === 'retext-readability' ? totalFragCount : totalWordCount);
 				
-				const countsKey = ['counts', xKey||'unknown', (yKey||'unknown').replace(/\./g, '-')].join('.');
+	// 			const countsKey = ['counts', xKey||'unknown', (yKey||'unknown').replace(/\./g, '-')].join('.');
 
-				const perWordCountsKey = ['pwcounts', xKey||'unknown', (yKey||'unknown').replace(/\./g, '-')].join('.');
-				const currentCount = (s ? countsKey.split('.').reduce((o,i) => o && o[i], s) || 0 : 0);
+	// 			const perWordCountsKey = ['pwcounts', xKey||'unknown', (yKey||'unknown').replace(/\./g, '-')].join('.');
+	// 			const currentCount = (s ? countsKey.split('.').reduce((o,i) => o && o[i], s) || 0 : 0);
 
-				updateFields[perWordCountsKey] = (currentCount / usingTotal) * 100;
-				added++;
-			});
-		});
+	// 			updateFields[perWordCountsKey] = (currentCount / usingTotal) * 100;
+	// 			added++;
+	// 		});
+	// 	});
 
-		if(added) {
-			console.log('Want to set on speaker:', s._id, updateFields);
-			Speakers.update(s._id, {
-				$set: updateFields
-			})
-		}
-	});
-	return false;*/
+	// 	if(added) {
+	// 		console.log('Want to set on speaker:', s._id, updateFields);
+	// 		Speakers.update(s._id, {
+	// 			$set: updateFields
+	// 		})
+	// 	}
+	// });
+	// return false;
 
 	Speakers.find({
 		'mnisIds': { $exists: true },
@@ -197,6 +198,8 @@ const process = function(logIt) {
 			const totalWordCount = (fragment.stats.words || 0) + ((existingSpeaker && existingSpeaker.counts && existingSpeaker.counts.words) || 0);
 			const totalFragCount = 1 + ((existingSpeaker && existingSpeaker.counts && existingSpeaker.counts.fragments) || 0);
 			
+			update['$set']['pwcounts.wpf'] = totalWordCount / totalFragCount;
+
 			fragment.retext && fragment.retext.messages && 
 			fragment.retext.messages.forEach(y => {
 				// const messageKey = ['messages', y.source||'unknown', (y.rule||'unknown').replace(/\./g, '-')].join('.');
