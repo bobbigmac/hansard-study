@@ -93,7 +93,7 @@ const process = function(logIt) {
 	})
 
 	//Optimism addition
-	Fragments.find({
+	/*Fragments.find({
 		'stats.optimism': { $exists: false },
 		'stats': { $exists: true, $ne: null },
 	}, {
@@ -117,7 +117,7 @@ const process = function(logIt) {
 			
 			logIt && console.log('Set optimism, affect and wellbeing for Fragment', id, optimism && optimism.OPTIMISM);
 		}
-	})
+	})*/
 
 	// MAIN STATS
 	Fragments.find({
@@ -128,6 +128,7 @@ const process = function(logIt) {
 		limit: 20,
 		// skip:1,
 	}).observeChanges({
+		//TODO: Use map for this, then batch it
 		added: function (id, fragment) {
 			fragment.text = fragment.text.replace(/\r\n/g, ' ').replace(/\s+/g, ' ').replace(/hon\./g, 'honorable').trim();
 
@@ -183,9 +184,9 @@ const process = function(logIt) {
 				}
 
 				// console.log('newData', newData);
-				// Fragments.update({_id: id}, {
-				// 	$set: newData
-				// });
+				Fragments.update({_id: id}, {
+					$set: newData
+				});
 
 				logIt && console.log('Analysed fragment', id);
 			}));

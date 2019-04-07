@@ -13,7 +13,7 @@ const crypto = require('crypto');
 
 
 Meteor.startup(() => {
-	const logIt = false;
+	const logIt = true;
 	// code to run on server at startup
 	Scrape.scrape(logIt);
 	ProcessText.process(logIt);

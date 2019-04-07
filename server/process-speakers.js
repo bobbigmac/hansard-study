@@ -103,7 +103,7 @@ const process = function(logIt) {
 		}
 	});
 
-	Fragments.find({
+	const cursor = Fragments.find({
 		'speaker': { $exists: true },
 		'speaker.pimsId': { $exists: true },
 		'speaker.imported': { $exists: false },
@@ -112,6 +112,7 @@ const process = function(logIt) {
 		'stats.optimism': { $exists: true },
 		'stats.wellbeing': { $exists: true },
 	}, {
+		// limit: 199999,
 		limit: 1,
 		// skip:0,
 		fields: {
@@ -120,8 +121,16 @@ const process = function(logIt) {
 			retext: 1,
 			terms: 1,
 		}
-	}).observeChanges({
+	// }).fetch().map(Meteor.bindEnvironment(function(fragment) {
+	// 	const id = fragment._id;
+	// 	delete fragment._id;
+	});
+
+	console.log(cursor.count(), 'fragments to process speakers for');
+
+	cursor.observeChanges({
 		added: function (id, fragment) {
+			logIt && console.log('Processing frament speaker for', id);
 			const existingSpeaker = Speakers.findOne({
 				pimsId: fragment.speaker.pimsId 
 			}, {
@@ -234,6 +243,7 @@ const process = function(logIt) {
 			logIt && console.log('Updated pims', fragment.speaker.pimsId, 'speakerId', speakerId, existingSpeaker && existingSpeaker.cts && existingSpeaker.cts[0]);
 		}
 	});
+	// }))
 }
 
 export default {
