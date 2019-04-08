@@ -126,7 +126,7 @@ const process = function(logIt) {
 	// 	delete fragment._id;
 	});
 
-	console.log(cursor.count(), 'fragments to process speakers for');
+	// console.log(cursor.count(), 'fragments to process speakers for');
 
 	cursor.observeChanges({
 		added: function (id, fragment) {

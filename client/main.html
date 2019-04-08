@@ -22,6 +22,7 @@
       <thead>
         <tr>
           <th>mnisId</th>
+          <th class={{sortClass 'pimsId' sort direction}} data-sort="pimsId">pimsId</th>
           <th>Name(s)</th>
           <th>Party</th>
           <th>Constituency</th>
@@ -46,6 +47,7 @@
         {{#each speakers}}
           <tr>
             <td>{{mnisIds}}</td>
+            <td class={{sortClass 'pimsId' sort}}>{{pimsId}}</td>
             <td>{{cts}}</td>
             <td party={{cleanPartyName party}}>{{party}}</td>
             <td>{{profile.primaryTopic.constituency.label._value}}</td>

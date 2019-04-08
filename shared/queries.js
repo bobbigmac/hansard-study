@@ -12,6 +12,13 @@ export const getSpeakers = function({ search = '', limit = 10, sort = '', direct
 		};
 		// filter[sort] = {'$exists':true};
 	}
+
+	// filter['mnisIds.0'] = {'$exists':true, '$eq':'231'};
+	
+	//TODO: Remove this filter (currently only care about active ministers
+	filter['mnisIds.0'] = {'$exists':true};
+	filter['party'] = {'$exists':true};
+
 	options.limit = limit > maxSpeakersLimit ? maxSpeakersLimit : limit;
 
 	options.fields = {
@@ -36,7 +43,10 @@ export const getSpeakers = function({ search = '', limit = 10, sort = '', direct
 		// options.names = search;
 	}
 
-	filter['counts.fragments'] = {$gt:1};
+	//Limit on fragments&words
+	filter['counts.fragments'] = {'$gt':10};
+	filter['counts.words'] = {'$gt':200};
+	
 	filter.fk = {$gt:4};
 
 	return Speakers.find(filter, options);
