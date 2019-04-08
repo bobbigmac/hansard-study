@@ -49,6 +49,10 @@ th.sort-selected.downwards::after {
 	flex: 1;
 	text-align: center;
 }
+.party-box i {
+	font-size: 0.8em;
+	opacity: 0.6;
+}
 .party-count {
 	font-weight: bold;
 	font-size: 1.4em;

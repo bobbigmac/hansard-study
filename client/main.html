@@ -16,8 +16,8 @@
           <div class="party-name">{{name}}</div>
           <div class="party-count">{{count}}</div>
         </div>
-        <div class="party-stats">{{words.toLocaleString}} words</div>
-        <div class="party-stats">{{fragments.toLocaleString}} fragments</div>
+        <div class="party-stats">{{words.toLocaleString}} words <i>{{toFixed wordShare 1}}%</i></div>
+        <div class="party-stats">{{fragments.toLocaleString}} frags <i>{{toFixed fragmentShare 1}}%</i></div>
       </span>
     {{/each}}
   </div>
@@ -29,7 +29,7 @@
           <th class={{sortClass 'pimsId' sort direction}} data-sort="pimsId">pimsId</th>
           <th>Name(s)</th>
           <th>Party</th>
-          <th class="hidden">Constituency</th>
+          <th>Constituency</th>
           <th class={{sortClass 'counts.fragments' sort direction}} data-sort="counts.fragments" title="Fragments">Frags</th>
           <th class={{sortClass 'counts.words' sort direction}} data-sort="counts.words" title="Words">Words</th>
           <th class={{sortClass 'pwcounts.wpf' sort direction}} data-sort="pwcounts.wpf" title="Words">W/F</th>
@@ -39,9 +39,9 @@
           <th class={{sortClass 'affect' sort direction}} data-sort="affect" title="Affect">Aff</th>
           <th class={{sortClass 'intensity' sort direction}} data-sort="intensity" title="Intensity">Int</th>
 
-          <th class={{sortClass 'pwcounts.retext-intensify.hedge' sort direction}} data-sort="pwcounts.retext-intensify.hedge" title="Hedge Words Pct">Hedge</th>
+          <!-- <th class={{sortClass 'pwcounts.retext-intensify.hedge' sort direction}} data-sort="pwcounts.retext-intensify.hedge" title="Hedge Words Pct">Hedge</th>
           <th class={{sortClass 'pwcounts.retext-intensify.weasel' sort direction}} data-sort="pwcounts.retext-intensify.weasel" title="Weasel Words Pct">Weasel</th>
-          <th class={{sortClass 'pwcounts.retext-intensify.filler' sort direction}} data-sort="pwcounts.retext-intensify.filler" title="Filler Words Pct">Filler</th>
+          <th class={{sortClass 'pwcounts.retext-intensify.filler' sort direction}} data-sort="pwcounts.retext-intensify.filler" title="Filler Words Pct">Filler</th> -->
           
           <th class={{sortClass 'pwcounts.averages.intensifysum' sort direction}} data-sort="pwcounts.averages.intensifysum" title="Low Intensity Words Pct">Int%</th>
           <th class={{sortClass 'pwcounts.averages.passivesum' sort direction}} data-sort="pwcounts.averages.passivesum" title="Passive Words Pct">Pass%</th>
@@ -60,7 +60,7 @@
             <td class={{sortClass 'pimsId' sort}}>{{pimsId}}</td>
             <td>{{cts}}</td>
             <td party={{cleanPartyName party}}>{{party}}</td>
-            <td class="hidden">{{profile.primaryTopic.constituency.label._value}}</td>
+            <td>{{profile.primaryTopic.constituency.label._value}}</td>
             <td class={{sortClass 'counts.fragments' sort}}>{{counts.fragments}}</td>
             <td class={{sortClass 'counts.words' sort}}>{{counts.words}}</td>
             <td class={{sortClass 'pwcounts.wpf' sort}}>{{toFixed pwcounts.wpf 1}}</td>
@@ -70,9 +70,9 @@
             <td class={{sortClass 'affect' sort}}>{{toFixed affect 2}}</td>
             <td class={{sortClass 'intensity' sort}}>{{toFixed intensity 2}}</td>
 
-            <td class={{sortClass 'pwcounts.retext-intensify.hedge' sort}}>{{ deepProp pwcounts "retext-intensify" "hedge"}}%</td>
+            <!-- <td class={{sortClass 'pwcounts.retext-intensify.hedge' sort}}>{{ deepProp pwcounts "retext-intensify" "hedge"}}%</td>
             <td class={{sortClass 'pwcounts.retext-intensify.weasel' sort}}>{{ deepProp pwcounts "retext-intensify" "weasel"}}%</td>
-            <td class={{sortClass 'pwcounts.retext-intensify.filler' sort}}>{{ deepProp pwcounts "retext-intensify" "filler"}}%</td>
+            <td class={{sortClass 'pwcounts.retext-intensify.filler' sort}}>{{ deepProp pwcounts "retext-intensify" "filler"}}%</td> -->
             
             <td class={{sortClass 'pwcounts.averages.intensifysum' sort}}>{{ deepProp pwcounts "averages" "intensifysum"}}%</td>
             <td class={{sortClass 'pwcounts.averages.passivesum' sort}}>{{ deepProp pwcounts "averages" "passivesum"}}%</td>

@@ -86,8 +86,32 @@ Template.speakers.helpers({
       return pre;
     }, {});
 
-    const partyArray = Object.entries(parties).map(([key, value]) => ({name: key, count: value, words: words[key], fragments: fragments[key] }));
+    const totalPartyCount = Object.keys(parties).reduce((p,k) => p + parties[k], 0);
+    const totalWordCount = Object.keys(parties).reduce((p,k) => p + words[k], 0);
+    const avgWordCount = totalWordCount / totalPartyCount;
+    const totalFragmentCount = Object.keys(parties).reduce((p,k) => p + fragments[k], 0);
+    const avgFragmentCount = totalFragmentCount / totalPartyCount;
+
+    // const partyShares = {};
+    const wordShares = {};
+    const fragmentShares = {};
+    Object.keys(parties).map(party => {
+      // partyShares[party] = parties[party] / totalPartyCount;
+      wordShares[party] = words[party] / avgWordCount;
+      fragmentShares[party] = fragments[party] / avgFragmentCount;
+    });
+
+    const partyArray = Object.entries(parties).map(([key, value]) => ({
+      name: key, 
+      count: value, 
+      words: words[key], 
+      fragments: fragments[key],
+      // partyShare: partyShares[key],
+      wordShare: wordShares[key],
+      fragmentShare: fragmentShares[key],
+    }));
     partyArray.sort((a,b) => a.count > b.count ? -1 : 1);
+
     // console.log(partyArray);
     return partyArray;
   }
