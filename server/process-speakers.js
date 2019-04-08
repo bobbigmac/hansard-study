@@ -112,7 +112,7 @@ const process = function(logIt) {
 		'stats.optimism': { $exists: true },
 		'stats.wellbeing': { $exists: true },
 	}, {
-		// limit: 199999,
+		// limit: 259999,
 		limit: 1,
 		// skip:0,
 		fields: {
