@@ -67,18 +67,28 @@ Template.speakers.helpers({
     const search = Template.instance().limit.get();
 
     // console.log(getSpeakers);
+    const fragments = {};
+    const words = {};
+
     const speakers = getSpeakers({ sort, direction, limit, search }).fetch();
     const parties = speakers.reduce((pre, speaker) => {
       const party = (speaker.party || '').replace(' (Co-op)', '').trim();
       if(party && party !== 'Speaker') {
         pre[party] = pre[party] || 0;
         pre[party]++;
+
+        fragments[party] = fragments[party] || 0;
+        fragments[party] += (speaker.counts && speaker.counts.fragments);
+
+        words[party] = words[party] || 0;
+        words[party] += (speaker.counts && speaker.counts.words);
       }
       return pre;
     }, {});
 
-    const partyArray = Object.entries(parties).map(([key, value]) => ({name: key, count: value}));
+    const partyArray = Object.entries(parties).map(([key, value]) => ({name: key, count: value, words: words[key], fragments: fragments[key] }));
     partyArray.sort((a,b) => a.count > b.count ? -1 : 1);
+    console.log(partyArray);
     return partyArray;
   }
 });
