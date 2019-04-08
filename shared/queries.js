@@ -44,9 +44,10 @@ export const getSpeakers = function({ search = '', limit = 10, sort = '', direct
 	}
 
 	//Limit on fragments&words
-	filter['counts.fragments'] = {'$gt':10};
-	filter['counts.words'] = {'$gt':200};
-	
+	// filter['counts.fragments'] = {'$gt':10};
+	// filter['counts.words'] = {'$gt':200};
+	filter['counts.words'] = {'$gt':1};
+
 	filter.fk = {$gt:4};
 
 	return Speakers.find(filter, options);
