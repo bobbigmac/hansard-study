@@ -64,6 +64,50 @@ const process = function(logIt) {
 	// });
 	// return false;
 
+	// Calc pw averages
+	Speakers.find({
+		'pwcounts.averages': { $exists: false },
+		'pwcounts': { $exists: true },
+	}, {
+		limit: 1,
+		fields: { pwcounts: true }
+	}).observeChanges({
+		added: function (id, speaker) {
+			const intensify = speaker.pwcounts['retext-intensify'];
+			const intensifyKeys = Object.keys(intensify || {});
+			const intensifySum = intensifyKeys.reduce((s, x) => s + intensify[x], 0);
+			const intensifyAvg = (intensifySum / intensifyKeys.length);
+
+			const passive = speaker.pwcounts['retext-passive'];
+			const passiveKeys = Object.keys(passive || {});
+			const passiveSum = passiveKeys.reduce((s, x) => s + passive[x], 0);
+			const passiveAvg = (passiveSum / passiveKeys.length);
+
+			const simplify = speaker.pwcounts['retext-simplify'];
+			const simplifyKeys = Object.keys(simplify || {});
+			const simplifySum = simplifyKeys.reduce((s, x) => s + simplify[x], 0);
+			const simplifyAvg = (simplifySum / simplifyKeys.length);
+			
+			const totalSum = (intensifySum + passiveSum + simplifySum);
+			
+			const averages = {
+				intensifysum: intensifySum,
+				passivesum: passiveSum,
+				simplifysum: simplifySum,
+				
+				intensify: intensifyAvg,
+				passive: passiveAvg,
+				simplify: simplifyAvg,
+
+				totalsum: totalSum,
+				totalavg: totalSum / 3,
+			};
+
+			Speakers.update(id, {$set: { 'pwcounts.averages': averages }});
+		}
+	});
+
+	// Get profiles
 	Speakers.find({
 		'mnisIds': { $exists: true },
 		'profile': { $exists: false },

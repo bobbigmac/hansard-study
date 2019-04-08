@@ -2,6 +2,9 @@ body {
   padding: 10px;
   font-family: sans-serif;
 }
+.hidden {
+	display: none;
+}
 table {
 	width: 100%;
 	margin-right: auto;
