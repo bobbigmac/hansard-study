@@ -13,10 +13,11 @@
     {{#each parties}}
       <span class="party-box" party={{name}}>
         <div>
-          <span class="party-name">{{name}}</span>
-          <span class="party-count">{{count}}</span>
+          <div class="party-name">{{name}}</div>
+          <div class="party-count">{{count}}</div>
         </div>
-        <div class="party-stats">{{words.toLocaleString}}w / {{fragments.toLocaleString}}f</div>
+        <div class="party-stats">{{words.toLocaleString}} words</div>
+        <div class="party-stats">{{fragments.toLocaleString}} fragments</div>
       </span>
     {{/each}}
   </div>

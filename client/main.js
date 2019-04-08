@@ -88,7 +88,7 @@ Template.speakers.helpers({
 
     const partyArray = Object.entries(parties).map(([key, value]) => ({name: key, count: value, words: words[key], fragments: fragments[key] }));
     partyArray.sort((a,b) => a.count > b.count ? -1 : 1);
-    console.log(partyArray);
+    // console.log(partyArray);
     return partyArray;
   }
 });

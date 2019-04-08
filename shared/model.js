@@ -10,6 +10,12 @@ if(Meteor.isServer) {
 	Speakers._ensureIndex({
 		fk: 1
 	})
+	Speakers._ensureIndex({
+		'counts.fragments': 1
+	})
+	Speakers._ensureIndex({
+		'counts.words': 1
+	})
 }
 if(Meteor.isClient) {
 	window.Speakers = Speakers;
