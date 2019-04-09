@@ -30,4 +30,3 @@ Meteor.call('get-resource-files');
 - Analyse per-MP topics/interests
 - Display chart over time
 - Support importing newer datasets
-- Route for MPs topics

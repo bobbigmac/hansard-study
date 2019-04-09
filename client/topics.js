@@ -77,19 +77,24 @@ Template.topics.helpers({
     return topics[key.name];
   },
   cssOrder() {
-    return "order: " + this.order + ";";
+    return "order: " + this.order + ";font-size:" + (this.share * 40) + 'px;';
   },
   selectedClass() {
     const party = Template.instance().party.get();
-    const key = Template.instance().activeKey.get();
-    return (this.name === party || this.name === key ? 'selected' : '');
+    const key = Template.instance().activeKey.get().name;
+    if(this.name === party) {
+      return 'selected';
+    }
+    if(this.name === key) {
+      return 'selected';
+    }
   },
   loadingClass() {
     return Template.instance().loading.get() ? 'loading' : '';
   },
   parties() {
     return [
-      { name: '', title: 'None' },
+      { name: '', title: 'All Parties' },
       { name: 'Conservative' },
       { name: 'Labour' },
       { name: 'Scottish National Party' },

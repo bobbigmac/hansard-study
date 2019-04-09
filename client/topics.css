@@ -1,14 +1,41 @@
 .topics-boxes {
 	display: flex;
-	flex-direction: column;
+	/*flex-direction: column;*/
+	flex-wrap: wrap;
+	align-items: baseline;
 }
 .topics-boxes .topic {
-	flex: 1 1;
-	transition: order 1s ease-out;
+	/*flex: 1 1;*/
+	flex-grow: 1;
+	/* wont work under blaze but leaving in anyway */
+	transition: order 1s linear;
+
+	display: inline-block;
+	padding: 2px 3px;
+	margin: 4px;
+
+	background-color: #f6f6f6;
+	text-align: center;
+	text-shadow: 0 0 black;
+	border: 1px solid transparent;
+}
+.topics-boxes .topic:hover {
+	border: 1px solid #999999;
+}
+.party-select {
+	opacity: 0.25;
+	/*color: white;*/
+	border: 1px solid #dddddd;
+	font-size: 1.1em;
+}
+.topic-select.selected {
+	background-color: #9c9c9c;
+	color: white
 }
 .party-select.selected {
 	padding: 13px 17px;
 	margin: 0;
+	opacity: 1;
 	border-radius: 0px;
 }
 .topics-boxes.loading {
@@ -21,10 +48,9 @@
 }
 .topics-list {
 	text-align: center;
+	margin-bottom: 20px;
 }
 .topics-list.loading,
 .parties-boxes.loading {
 	opacity: 0.1;
-}
-.topic {
 }

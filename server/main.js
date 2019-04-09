@@ -146,23 +146,24 @@ Meteor.methods({
 		})).filter(x => x.count > 2);
 
 		// console.log('Starting sort', topics.length);
+		const numItems = 200;
 		
 		// const countedTopics = topics.sort((a,b) => console.log(a, b) || (a.count > b.count ? -1 : 1))
 		const countedTopics = topics.sort((a,b) => a.count > b.count ? -1 : 1)
 													.map(x => ({phrase: x.phrase, count: x.count }))
-													.slice(0, 100);
+													.slice(0, numItems);
 
 		const scoredTopics = topics.sort((a,b) => a.score > b.score ? -1 : 1)
 													.map(x => ({phrase: x.phrase, count: x.score }))
-													.slice(0, 100);
+													.slice(0, numItems);
 
 		const pwTopics = topics.sort((a,b) => a.pw > b.pw ? -1 : 1)
 											.map(x => ({phrase: x.phrase, count: x.pw }))
-											.slice(0, 100);
+											.slice(0, numItems);
 
 		const pfTopics = topics.sort((a,b) => a.pf > b.pf ? -1 : 1)
 											.map(x => ({phrase: x.phrase, count: x.pf }))
-											.slice(0, 100);
+											.slice(0, numItems);
 
 		return { countedTopics, scoredTopics, pwTopics, pfTopics };
 	},

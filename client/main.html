@@ -3,7 +3,17 @@
 </head>
 
 <body>
-  <h3>Study of Parliamentary Hansard Data for Flesch-Kincaid (and other metrics)</h3>
-
-  {{> speakers}}
 </body>
+
+<template name="layout">
+  {{> Template.dynamic template="header"}}
+  {{> Template.dynamic template=main}}
+</template>
+
+<template name="header">
+  <header class="header">
+  	<a class="nav-link" href="/">Speakers</a>
+  	<a class="nav-link" href="/topics">Topics</a>
+  </header>
+  <h3>Study of Parliamentary Hansard Data for Flesch-Kincaid (and other metrics)</h3>
+</template>
