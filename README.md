@@ -27,7 +27,7 @@ Meteor.call('get-resource-files');
 - [Thesaurus](http://explore.data.parliament.uk/?learnmore=Thesaurus)
 - Import attendance record
 - Import tweets
-- Import interests
 - Analyse per-MP topics/interests
 - Display chart over time
 - Support importing newer datasets
+- Route for MPs topics

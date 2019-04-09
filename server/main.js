@@ -24,6 +24,136 @@ Meteor.startup(() => {
 
 
 Meteor.methods({
+	'get-popular-words': function(party = '') {
+		let topics = Speakers.find({
+			terms: {$exists:true},
+		}, {
+			fields: { party: 1, 'terms.words': 1, 'terms.wordsHash': 1 }
+		}).fetch().reduce((pre, s) => {
+			Object.keys(s.terms.wordsHash).map(wordKey => {
+				pre[wordKey] = pre[wordKey] || {};
+				
+				pre[wordKey].word = pre[wordKey].word || s.terms.wordsHash[wordKey].word;
+
+				pre[wordKey].score = pre[wordKey].score || 0;
+				pre[wordKey].score += s.terms.wordsHash[wordKey].score;
+
+				pre[wordKey].count = pre[wordKey].count || 0;
+				pre[wordKey].count += 1;
+
+				if(s.terms.wordsHash[wordKey].pw) {
+					// pre[wordKey].pws = (pre[wordKey].pws || []).concat([s.terms.wordsHash[wordKey].pw]);
+					pre[wordKey].pw = pre[wordKey].pw || 0;
+					pre[wordKey].pw += s.terms.wordsHash[wordKey].pw;
+				}
+				if(s.terms.wordsHash[wordKey].pf) {
+					// pre[wordKey].pfs = (pre[wordKey].pfs || []).concat([s.terms.wordsHash[wordKey].pf]);
+					pre[wordKey].pf = pre[wordKey].pf || 0;
+					pre[wordKey].pf += s.terms.wordsHash[wordKey].pf;
+				}
+			});
+			
+			return pre;
+		}, {});
+
+		console.log('Starting remap');
+
+		topics = Object.entries(topics).map(x => ({
+			word: x[1].word, 
+			score: x[1].score,
+			count: x[1].count,
+			// pw: x[1].pws.reduce((sum,x) => x + sum, 0) / x[1].pws.length,
+			pw: x[1].pw,
+			// pf: x[1].pfs.reduce((sum,x) => x + sum, 0) / x[1].pfs.length,
+			pf: x[1].pf,
+		})).filter(x => x.count > 2);
+
+		console.log('Starting sort', topics.length);
+		
+		// const countedTopics = topics.sort((a,b) => console.log(a, b) || (a.count > b.count ? -1 : 1))
+		const countedTopics = topics.sort((a,b) => a.count > b.count ? -1 : 1)
+													// .map(x => x.word)
+													.slice(0, 100);
+
+		const scoredTopics = topics.sort((a,b) => a.score > b.score ? -1 : 1)
+													// .map(x => x.word)
+													.slice(0, 100);
+
+		const pwTopics = topics.sort((a,b) => a.pw > b.pw ? -1 : 1)
+											// .map(x => x.word)
+											.slice(0, 100);
+
+		const pfTopics = topics.sort((a,b) => a.pf > b.pf ? -1 : 1)
+											// .map(x => x.word)
+											.slice(0, 100);
+
+		return { countedTopics, scoredTopics, pwTopics, pfTopics };
+	},
+	'get-popular-phrases': function(party = '') {
+		let topics = Speakers.find({
+			terms: {$exists:true},
+		}, {
+			fields: { party: 1, 'terms.phrases': 1, 'terms.phrasesHash': 1 }
+		}).fetch().reduce((pre, s) => {
+			Object.keys(s.terms.phrasesHash).map(phraseKey => {
+				pre[phraseKey] = pre[phraseKey] || {};
+				
+				pre[phraseKey].phrase = pre[phraseKey].phrase || s.terms.phrasesHash[phraseKey].phrase;
+
+				pre[phraseKey].score = pre[phraseKey].score || 0;
+				pre[phraseKey].score += s.terms.phrasesHash[phraseKey].score;
+
+				pre[phraseKey].count = pre[phraseKey].count || 0;
+				pre[phraseKey].count += 1;
+
+				if(s.terms.phrasesHash[phraseKey].pw) {
+					// pre[phraseKey].pws = (pre[phraseKey].pws || []).concat([s.terms.phrasesHash[phraseKey].pw]);
+					pre[phraseKey].pw = pre[phraseKey].pw || 0;
+					pre[phraseKey].pw += s.terms.phrasesHash[phraseKey].pw;
+				}
+				if(s.terms.phrasesHash[phraseKey].pf) {
+					// pre[phraseKey].pfs = (pre[phraseKey].pfs || []).concat([s.terms.phrasesHash[phraseKey].pf]);
+					pre[phraseKey].pf = pre[phraseKey].pf || 0;
+					pre[phraseKey].pf += s.terms.phrasesHash[phraseKey].pf;
+				}
+			});
+			
+			return pre;
+		}, {});
+
+		console.log('Starting remap');
+
+		topics = Object.entries(topics).map(x => ({
+			phrase: x[1].phrase, 
+			score: x[1].score,
+			count: x[1].count,
+			// pw: x[1].pws.reduce((sum,x) => x + sum, 0) / x[1].pws.length,
+			pw: x[1].pw,
+			// pf: x[1].pfs.reduce((sum,x) => x + sum, 0) / x[1].pfs.length,
+			pf: x[1].pf,
+		})).filter(x => x.count > 2);
+
+		console.log('Starting sort', topics.length);
+		
+		// const countedTopics = topics.sort((a,b) => console.log(a, b) || (a.count > b.count ? -1 : 1))
+		const countedTopics = topics.sort((a,b) => a.count > b.count ? -1 : 1)
+													// .map(x => x.phrase)
+													.slice(0, 100);
+
+		const scoredTopics = topics.sort((a,b) => a.score > b.score ? -1 : 1)
+													// .map(x => x.phrase)
+													.slice(0, 100);
+
+		const pwTopics = topics.sort((a,b) => a.pw > b.pw ? -1 : 1)
+											// .map(x => x.phrase)
+											.slice(0, 100);
+
+		const pfTopics = topics.sort((a,b) => a.pf > b.pf ? -1 : 1)
+											// .map(x => x.phrase)
+											.slice(0, 100);
+
+		return { countedTopics, scoredTopics, pwTopics, pfTopics };
+	},
 	'get-resource-files': function() {
 		const resourcesUrl = 'http://api.data.parliament.uk/resources/files/feed?dataset=12&take=all';
 

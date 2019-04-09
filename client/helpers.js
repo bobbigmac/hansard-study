@@ -24,6 +24,19 @@ Template.registerHelper("deepProp",function(obj = {}, a = null, b = null, c = nu
 		return Number.parseFloat(''+(obj[a]), 10).toFixed(decimals);
 	}
 });
+Template.registerHelper("deepPropPct",function(obj = {}, a = null, b = null, c = null) {
+	const decimals = 2;
+	// console.log(obj, a, b, c, decimals);
+	if(c && typeof c === 'string') {
+		return (Number.parseFloat(''+(obj[a] && obj[a][b] && obj[a][b][c]), 10) * 100).toFixed(decimals);
+	}
+	if(b && typeof b === 'string') {
+		return (Number.parseFloat(''+(obj[a] && obj[a][b]), 10) * 100).toFixed(decimals);
+	}
+	if(a && typeof a === 'string') {
+		return (Number.parseFloat(''+(obj[a]), 10) * 100).toFixed(decimals);
+	}
+});
 
 Template.registerHelper("cleanPartyName",function(name = '') {
 	return (name || '').replace(' (Co-op)', '').trim();
