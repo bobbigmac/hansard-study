@@ -10,6 +10,13 @@ if(Meteor.isServer) {
 	Speakers._ensureIndex({ 'fk': 1 })
 	Speakers._ensureIndex({ 'counts.fragments': 1 })
 	Speakers._ensureIndex({ 'counts.words': 1 })
+
+	//TODO: Index terms.words case insensitive
+	//TODO: Index terms.phrase case insensitive
+	
+	//TODO: Remove this (any way to index these?
+	Speakers._ensureIndex({ 'terms.wordsHash.brexit.score': 1 })
+	Speakers._ensureIndex({ 'terms.wordsHash.brexit.pw': 1 })
 }
 
 const Fragments = new Mongo.Collection('fragments');

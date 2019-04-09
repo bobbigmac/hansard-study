@@ -10,7 +10,7 @@ export const getSpeakers = function({ search = '', limit = 10, sort = '', direct
 		options.sort = {
 			[sort]: direction
 		};
-		// filter[sort] = {'$exists':true};
+		filter[sort] = {'$exists':true};
 	}
 
 	// filter['mnisIds.0'] = {'$exists':true, '$eq':'231'};
@@ -22,7 +22,11 @@ export const getSpeakers = function({ search = '', limit = 10, sort = '', direct
 	options.limit = limit > maxSpeakersLimit ? maxSpeakersLimit : limit;
 
 	options.fields = {
-		fks: 0, intensities: 0, affects: 0, optimisms: 0, sentiments: 0
+		fks: 0, intensities: 0, affects: 0, optimisms: 0, sentiments: 0,
+	}
+	if(sort && sort.indexOf('terms') === 0) {
+	} else {
+		options.fields.terms = 0;
 	}
 	//TODO: Allow server to get more fields
 	// options.fields = {

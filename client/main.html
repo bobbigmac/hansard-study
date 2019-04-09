@@ -43,6 +43,9 @@
           <th class={{sortClass 'pwcounts.retext-intensify.weasel' sort direction}} data-sort="pwcounts.retext-intensify.weasel" title="Weasel Words Pct">Weasel</th>
           <th class={{sortClass 'pwcounts.retext-intensify.filler' sort direction}} data-sort="pwcounts.retext-intensify.filler" title="Filler Words Pct">Filler</th> -->
           
+          <th class={{sortClass 'terms.wordsHash.brexit.score' sort direction}} data-sort="terms.wordsHash.brexit.score" title="Brexit Mentions">Brexit</th>
+          <th class={{sortClass 'terms.wordsHash.brexit.pw' sort direction}} data-sort="terms.wordsHash.brexit.pw" title="Brexit Mentions Per Word">Brexit pw</th>
+
           <th class={{sortClass 'pwcounts.averages.intensifysum' sort direction}} data-sort="pwcounts.averages.intensifysum" title="Low Intensity Words Pct">Int%</th>
           <th class={{sortClass 'pwcounts.averages.passivesum' sort direction}} data-sort="pwcounts.averages.passivesum" title="Passive Words Pct">Pass%</th>
           <th class={{sortClass 'pwcounts.averages.simplifysum' sort direction}} data-sort="pwcounts.averages.simplifysum" title="Simplify Words Pct">Simp%</th>
@@ -74,6 +77,9 @@
             <td class={{sortClass 'pwcounts.retext-intensify.weasel' sort}}>{{ deepProp pwcounts "retext-intensify" "weasel"}}%</td>
             <td class={{sortClass 'pwcounts.retext-intensify.filler' sort}}>{{ deepProp pwcounts "retext-intensify" "filler"}}%</td> -->
             
+            <td class={{sortClass 'terms.wordsHash.brexit.score' sort}}>{{ deepProp terms "wordsHash" "brexit" "score"}}</td>
+            <td class={{sortClass 'terms.wordsHash.brexit.pw' sort}}>{{ deepProp terms "wordsHash" "brexit" "pw"}}</td>
+
             <td class={{sortClass 'pwcounts.averages.intensifysum' sort}}>{{ deepProp pwcounts "averages" "intensifysum"}}%</td>
             <td class={{sortClass 'pwcounts.averages.passivesum' sort}}>{{ deepProp pwcounts "averages" "passivesum"}}%</td>
             <td class={{sortClass 'pwcounts.averages.simplifysum' sort}}>{{ deepProp pwcounts "averages" "simplifysum"}}%</td>

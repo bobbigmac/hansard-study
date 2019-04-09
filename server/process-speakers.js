@@ -64,6 +64,110 @@ const process = function(logIt) {
 	// });
 	// return false;
 
+
+	Speakers.find({
+		'terms': { $exists: false },
+		'counts.words': { $gt: 0 },
+		'counts.fragments': { $gt: 0 },
+	}, {
+		limit: 1,
+		// skip: 100,
+		fields: {
+			cts: true,
+			mnisIds: true,
+			pimsId: true,
+			counts: 1,
+		}
+	}).observeChanges({
+		added: function (id, speaker) {
+			const allFragments = Fragments.find({
+				$or: [
+					{ 'speaker.id': id },
+					{ 'speaker.pimsId': speaker.pimsId },
+					{ 'speaker.mnisId': (speaker.mnisIds && speaker.mnisIds[0]) || 0 },
+				]
+			}, {
+				fields: {
+					terms: 1,
+				}
+			}).fetch();
+			console.log('Want terms for speaker', speaker.cts, allFragments.length);
+
+			const terms = allFragments.reduce((pre, fragment) => {
+				if(fragment.terms) {
+					(fragment.terms.words || []).map(x => {
+						pre.words[x.word] = pre.words[x.word] || 0;
+						pre.words[x.word] += x.score;
+					});
+					(fragment.terms.phrases || []).map(x => {
+						pre.phrases[x.phrase] = pre.phrases[x.phrase] || 0;
+						pre.phrases[x.phrase] += x.score;
+					});
+				}
+				return pre;
+			}, {
+				words: {},
+				phrases: {},
+			});
+
+			terms.words = Object.entries(terms.words).map(x => ({
+				word: x[0], 
+				score: x[1],
+				pw: x[1] / speaker.counts.words,
+				pf: x[1] / speaker.counts.fragments,
+			}));
+			terms.phrases = Object.entries(terms.phrases).map(x => ({
+				phrase: x[0], 
+				score: x[1],
+				pw: x[1] / speaker.counts.words,
+				pf: x[1] / speaker.counts.fragments,
+			}));
+
+			const numItems = 1000;
+			const topItems = 50;
+
+			terms.words.sort((a,b) => a.score > b.score ? -1 : 1);
+			terms.words = terms.words.slice(0,numItems);
+			terms.phrases.sort((a,b) => a.score > b.score ? -1 : 1);
+			terms.phrases = terms.phrases.slice(0,numItems);
+
+			terms.topWords = terms.words.slice(0, topItems).map(x => x.word);
+			// terms.bottomWords = terms.words.slice(Math.max(terms.words.length - topItems, 1)).reverse();
+			terms.topPhrases = terms.phrases.slice(0, topItems).map(x => x.phrase);
+			// terms.bottomPhrases = terms.phrases.slice(Math.max(terms.phrases.length - topItems, 1)).reverse();
+
+			terms.wordsHash = terms.words.reduce((pre, x) => {
+				const wordKey = x.word.toLowerCase().replace(/[\.]/g, '-').replace(/[\$]/g, '_');
+				pre[wordKey] = {
+					score: x.score,
+					word: x.word,
+					pw: x.pw,
+					pf: x.pf,
+				};
+				return pre;
+			}, {});
+			terms.phrasesHash = terms.phrases.reduce((pre, x) => {
+				const wordKey = x.phrase.toLowerCase().replace(/[\.]/g, '-').replace(/[\$]/g, '_');
+				pre[wordKey] = {
+					score: x.score,
+					phrase: x.phrase,
+					pw: x.pw,
+					pf: x.pf,
+				};
+				return pre;
+			}, {});
+
+			terms.words = terms.words.map(w => w.word);
+			terms.phrases = terms.phrases.map(w => w.phrase);
+			
+			// console.log(terms.words);
+			Speakers.update(id, {
+				$set: { terms }
+			});
+			console.log('Saved words', terms.words.length, 'phrases', terms.phrases.length, 'to speaker', speaker.cts);//, terms);
+		}
+	});
+
 	// Calc pw averages
 	Speakers.find({
 		'pwcounts.averages': { $exists: false },
@@ -89,7 +193,7 @@ const process = function(logIt) {
 			const simplifyAvg = (simplifySum / simplifyKeys.length);
 			
 			const totalSum = (intensifySum + passiveSum + simplifySum);
-			
+
 			const averages = {
 				intensifysum: intensifySum,
 				passivesum: passiveSum,
