@@ -25,9 +25,13 @@ Meteor.startup(() => {
 
 Meteor.methods({
 	'get-popular-words': function(party = '') {
-		let topics = Speakers.find({
+		const filter = {
 			terms: {$exists:true},
-		}, {
+		};
+		if(party && typeof party === 'string') {
+			filter.party = party;
+		}
+		let topics = Speakers.find(filter, {
 			fields: { party: 1, 'terms.words': 1, 'terms.wordsHash': 1 }
 		}).fetch().reduce((pre, s) => {
 			Object.keys(s.terms.wordsHash).map(wordKey => {
@@ -56,7 +60,7 @@ Meteor.methods({
 			return pre;
 		}, {});
 
-		console.log('Starting remap');
+		// console.log('Starting remap');
 
 		topics = Object.entries(topics).map(x => ({
 			word: x[1].word, 
@@ -68,7 +72,7 @@ Meteor.methods({
 			pf: x[1].pf,
 		})).filter(x => x.count > 2);
 
-		console.log('Starting sort', topics.length);
+		// console.log('Starting sort', topics.length);
 		
 		// const countedTopics = topics.sort((a,b) => console.log(a, b) || (a.count > b.count ? -1 : 1))
 		const countedTopics = topics.sort((a,b) => a.count > b.count ? -1 : 1)
@@ -90,9 +94,13 @@ Meteor.methods({
 		return { countedTopics, scoredTopics, pwTopics, pfTopics };
 	},
 	'get-popular-phrases': function(party = '') {
-		let topics = Speakers.find({
+		const filter = {
 			terms: {$exists:true},
-		}, {
+		};
+		if(party && typeof party === 'string') {
+			filter.party = party;
+		}
+		let topics = Speakers.find(filter, {
 			fields: { party: 1, 'terms.phrases': 1, 'terms.phrasesHash': 1 }
 		}).fetch().reduce((pre, s) => {
 			Object.keys(s.terms.phrasesHash).map(phraseKey => {
@@ -121,7 +129,7 @@ Meteor.methods({
 			return pre;
 		}, {});
 
-		console.log('Starting remap');
+		// console.log('Starting remap');
 
 		topics = Object.entries(topics).map(x => ({
 			phrase: x[1].phrase, 
@@ -133,7 +141,7 @@ Meteor.methods({
 			pf: x[1].pf,
 		})).filter(x => x.count > 2);
 
-		console.log('Starting sort', topics.length);
+		// console.log('Starting sort', topics.length);
 		
 		// const countedTopics = topics.sort((a,b) => console.log(a, b) || (a.count > b.count ? -1 : 1))
 		const countedTopics = topics.sort((a,b) => a.count > b.count ? -1 : 1)
