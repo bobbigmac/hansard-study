@@ -29,7 +29,11 @@ Meteor.methods({
 			terms: {$exists:true},
 		};
 		if(party && typeof party === 'string') {
-			filter.party = party;
+			if(party === 'Labour') {
+				filter.party = { '$in': ['Labour', 'Labour (Co-op)'] }
+			} else {
+				filter.party = party;
+			}
 		}
 		let topics = Speakers.find(filter, {
 			fields: { party: 1, 'terms.words': 1, 'terms.wordsHash': 1 }

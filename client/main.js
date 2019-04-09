@@ -4,6 +4,7 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import { getSpeakers } from '/shared/queries.js';
 
 import './helpers.js';
+import './topics.js';
 
 import './main.html';
 

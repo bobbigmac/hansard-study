@@ -6,6 +6,9 @@ Template.registerHelper("twitterLink",function(twitterUrl) {
 Template.registerHelper("log",function(a) {
 	console.log(a);
 });
+Template.registerHelper("either",function(a, b) {
+	return a || b;
+});
 
 Template.registerHelper("averageArray",function(arr = [], decimals = 2) {
 	return (arr.reduce((sum, curr) => sum + curr, 0) / arr.length).toFixed(decimals);

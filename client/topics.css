@@ -1,0 +1,15 @@
+.topics-boxes {
+}
+.party-select.selected {
+	padding: 13px 17px;
+	margin: 0;
+	border-radius: 0px;
+}
+.topics-boxes.loading {
+	opacity: 0.1;
+}
+.parties-boxes.loading {
+	opacity: 0.1;
+}
+.topic {
+}
