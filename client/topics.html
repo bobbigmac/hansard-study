@@ -7,10 +7,19 @@
       </a>
     {{/each}}
   </div>
+  <div class="topics-list {{loadingClass}}">
+    {{#each availableKeys}}
+      <a class="btn topic-select {{selectedClass}}">
+        {{either title name}}
+      </a>
+    {{/each}}
+  </div>
   <div class="topics-boxes {{loadingClass}}">
-    {{#each topics.scoredTopics}}
-      <div class="topic">
-        {{phrase}}
+    {{#each activeSet}}
+      <div class="topic" style={{cssOrder}}>
+        <span>{{either phrase word}}</span>
+        <span>{{toFixed count 2}}</span>
+        <span>{{share}}%</span>
       </div>
     {{/each}}
   </div>

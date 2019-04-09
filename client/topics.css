@@ -1,4 +1,10 @@
 .topics-boxes {
+	display: flex;
+	flex-direction: column;
+}
+.topics-boxes .topic {
+	flex: 1 1;
+	transition: order 1s ease-out;
 }
 .party-select.selected {
 	padding: 13px 17px;
@@ -8,6 +14,15 @@
 .topics-boxes.loading {
 	opacity: 0.1;
 }
+.parties-boxes {
+	margin: 30px;
+	width: 100%;
+	text-align: center;
+}
+.topics-list {
+	text-align: center;
+}
+.topics-list.loading,
 .parties-boxes.loading {
 	opacity: 0.1;
 }

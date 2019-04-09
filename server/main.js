@@ -149,19 +149,19 @@ Meteor.methods({
 		
 		// const countedTopics = topics.sort((a,b) => console.log(a, b) || (a.count > b.count ? -1 : 1))
 		const countedTopics = topics.sort((a,b) => a.count > b.count ? -1 : 1)
-													// .map(x => x.phrase)
+													.map(x => ({phrase: x.phrase, count: x.count }))
 													.slice(0, 100);
 
 		const scoredTopics = topics.sort((a,b) => a.score > b.score ? -1 : 1)
-													// .map(x => x.phrase)
+													.map(x => ({phrase: x.phrase, count: x.score }))
 													.slice(0, 100);
 
 		const pwTopics = topics.sort((a,b) => a.pw > b.pw ? -1 : 1)
-											// .map(x => x.phrase)
+											.map(x => ({phrase: x.phrase, count: x.pw }))
 											.slice(0, 100);
 
 		const pfTopics = topics.sort((a,b) => a.pf > b.pf ? -1 : 1)
-											// .map(x => x.phrase)
+											.map(x => ({phrase: x.phrase, count: x.pf }))
 											.slice(0, 100);
 
 		return { countedTopics, scoredTopics, pwTopics, pfTopics };
