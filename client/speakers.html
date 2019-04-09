@@ -1,0 +1,90 @@
+
+<template name="speakers">
+  <div class="party-boxes">
+    {{#each parties}}
+      <span class="party-box" party={{name}}>
+        <div>
+          <div class="party-name">{{name}}</div>
+          <div class="party-count">{{count}}</div>
+        </div>
+        <div class="party-stats">{{words.toLocaleString}} words <i>{{toFixed wordShare 1}}%</i></div>
+        <div class="party-stats">{{fragments.toLocaleString}} frags <i>{{toFixed fragmentShare 1}}%</i></div>
+      </span>
+    {{/each}}
+  </div>
+  <div>
+    <table>
+      <thead>
+        <tr>
+          <th>mnisId</th>
+          <th class={{sortClass 'pimsId' sort direction}} data-sort="pimsId">pimsId</th>
+          <th>Name(s)</th>
+          <th>Party</th>
+          <th>Constituency</th>
+          <th class={{sortClass 'counts.fragments' sort direction}} data-sort="counts.fragments" title="Fragments">Frags</th>
+          <th class={{sortClass 'counts.words' sort direction}} data-sort="counts.words" title="Words">Words</th>
+          <th class={{sortClass 'pwcounts.wpf' sort direction}} data-sort="pwcounts.wpf" title="Words">W/F</th>
+          <th class={{sortClass 'fk' sort direction}} data-sort="fk" title="Flesch-Kincaid">FK</th>
+          <th class={{sortClass 'optimism' sort direction}} data-sort="optimism" title="Optimism">Opt</th>
+          <th class={{sortClass 'sentiment' sort direction}} data-sort="sentiment" title="Sentiment">Sen</th>
+          <th class={{sortClass 'affect' sort direction}} data-sort="affect" title="Affect">Aff</th>
+          <th class={{sortClass 'intensity' sort direction}} data-sort="intensity" title="Intensity">Int</th>
+
+          <!-- <th class={{sortClass 'pwcounts.retext-intensify.hedge' sort direction}} data-sort="pwcounts.retext-intensify.hedge" title="Hedge Words Pct">Hedge</th>
+          <th class={{sortClass 'pwcounts.retext-intensify.weasel' sort direction}} data-sort="pwcounts.retext-intensify.weasel" title="Weasel Words Pct">Weasel</th>
+          <th class={{sortClass 'pwcounts.retext-intensify.filler' sort direction}} data-sort="pwcounts.retext-intensify.filler" title="Filler Words Pct">Filler</th> -->
+          
+          <th class={{sortClass 'terms.wordsHash.brexit.score' sort direction}} data-sort="terms.wordsHash.brexit.score" title="Brexit Mentions">Brexit</th>
+          <th class={{sortClass 'terms.wordsHash.brexit.pw' sort direction}} data-sort="terms.wordsHash.brexit.pw" title="Brexit Mentions Per Word">Brexit pw</th>
+
+          <th class={{sortClass 'pwcounts.averages.intensifysum' sort direction}} data-sort="pwcounts.averages.intensifysum" title="Low Intensity Words Pct">Int%</th>
+          <th class={{sortClass 'pwcounts.averages.passivesum' sort direction}} data-sort="pwcounts.averages.passivesum" title="Passive Words Pct">Pass%</th>
+          <th class={{sortClass 'pwcounts.averages.simplifysum' sort direction}} data-sort="pwcounts.averages.simplifysum" title="Simplify Words Pct">Simp%</th>
+          <th class={{sortClass 'pwcounts.averages.totalsum' sort direction}} data-sort="pwcounts.averages.totalsum" title="Low Intensity, Passive and Simplify Words Pct">Error%</th>
+
+          <th class={{sortClass 'pwcounts.retext-readability.retext-readability' sort direction}} data-sort="pwcounts.retext-readability.retext-readability" title="Readability Warnings per Fragment">Warn</th>
+
+          <th class="hidden">Twitter</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each speakers}}
+          <tr>
+            <td>{{mnisIds}}</td>
+            <td class={{sortClass 'pimsId' sort}}>{{pimsId}}</td>
+            <td>{{cts}}</td>
+            <td party={{cleanPartyName party}}>{{party}}</td>
+            <td>{{profile.primaryTopic.constituency.label._value}}</td>
+            <td class={{sortClass 'counts.fragments' sort}}>{{counts.fragments}}</td>
+            <td class={{sortClass 'counts.words' sort}}>{{counts.words}}</td>
+            <td class={{sortClass 'pwcounts.wpf' sort}}>{{toFixed pwcounts.wpf 1}}</td>
+            <td class={{sortClass 'fk' sort}}>{{toFixed fk 2}}</td>
+            <td class={{sortClass 'optimism' sort}}>{{toFixed optimism 2}}</td>
+            <td class={{sortClass 'sentiment' sort}}>{{toFixed sentiment 2}}</td>
+            <td class={{sortClass 'affect' sort}}>{{toFixed affect 2}}</td>
+            <td class={{sortClass 'intensity' sort}}>{{toFixed intensity 2}}</td>
+
+            <!-- <td class={{sortClass 'pwcounts.retext-intensify.hedge' sort}}>{{ deepProp pwcounts "retext-intensify" "hedge"}}%</td>
+            <td class={{sortClass 'pwcounts.retext-intensify.weasel' sort}}>{{ deepProp pwcounts "retext-intensify" "weasel"}}%</td>
+            <td class={{sortClass 'pwcounts.retext-intensify.filler' sort}}>{{ deepProp pwcounts "retext-intensify" "filler"}}%</td> -->
+            
+            <td class={{sortClass 'terms.wordsHash.brexit.score' sort}}>{{ deepProp terms "wordsHash" "brexit" "score"}}</td>
+            <td class={{sortClass 'terms.wordsHash.brexit.pw' sort}}>{{ deepPropPct terms "wordsHash" "brexit" "pw"}}%</td>
+
+            <td class={{sortClass 'pwcounts.averages.intensifysum' sort}}>{{ deepProp pwcounts "averages" "intensifysum"}}%</td>
+            <td class={{sortClass 'pwcounts.averages.passivesum' sort}}>{{ deepProp pwcounts "averages" "passivesum"}}%</td>
+            <td class={{sortClass 'pwcounts.averages.simplifysum' sort}}>{{ deepProp pwcounts "averages" "simplifysum"}}%</td>
+            <td class={{sortClass 'pwcounts.averages.totalsum' sort}}>{{ deepProp pwcounts "averages" "totalsum"}}%</td>
+            
+            <td class={{sortClass 'pwcounts.retext-readability.retext-readability' sort}}>{{ deepProp pwcounts "retext-readability" "retext-readability"}}%</td>
+
+            <td class="hidden">{{#if twitter}}<a href={{twitterLink twitter}} target="_blank">{{twitterName twitter}}</a>{{/if}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <div>
+      <button class="load-more">Load More...</button>
+    </div>
+  </div>
+</template>
